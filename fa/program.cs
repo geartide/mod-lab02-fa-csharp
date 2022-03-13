@@ -80,9 +80,56 @@ namespace fans
 
   public class FA2
   {
+    public static State a = new State()
+    {
+      Name = "0",
+      IsAcceptState = false,
+      Transitions = new Dictionary<char, State>()
+    };
+
+    public static State b = new State()
+    {
+      Name = "1",
+      IsAcceptState = true,
+      Transitions = new Dictionary<char, State>()
+    };
+
+    public static State c = new State()
+    {
+      Name = "2",
+      IsAcceptState = false,
+      Transitions = new Dictionary<char, State>()
+    };
+
+    public static State d = new State()
+    {
+      Name = "3",
+      IsAcceptState = false,
+      Transitions = new Dictionary<char, State>()
+    };
+
+    public FA2()
+    {
+      a.Transitions['0'] = c;
+      a.Transitions['1'] = d;
+      b.Transitions['0'] = d;
+      b.Transitions['1'] = c;
+      c.Transitions['0'] = a;
+      c.Transitions['1'] = b;
+      d.Transitions['0'] = b;
+      d.Transitions['1'] = a;
+    }
+
     public bool? Run(IEnumerable<char> s)
     {
-      return false;
+      State state = a;
+      foreach (var ch in s)
+      {
+        state = state.Transitions[ch];
+        if (state == null)
+          return null;
+      }
+      return state.IsAcceptState;
     }
   }
   
